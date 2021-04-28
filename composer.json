@@ -1,0 +1,21 @@
+{
+    "name": "codememory/fs",
+    "license": "MIT",
+    "description": "",
+    "authors": [
+        {
+            "name": "Danil",
+            "email": "kostynd1@gmail.com"
+        }
+    ],
+    "require": {
+        "ext-mbstring": "*",
+        "codememory/unit-conversion": "1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Codememory\\FileSystem\\": ""
+        }
+    },
+    "minimum-stability": "dev"
+}
