@@ -63,7 +63,7 @@ class File implements FileInterface
     public function getRealPath(?string $path = null): bool|string
     {
 
-        $rootDirectory = dirname(__DIR__, 4);
+        $rootDirectory = dirname(__DIR__, 3);
 
         if (str_starts_with($path, '*')) {
             return substr(trim($path, '/'), 1);
