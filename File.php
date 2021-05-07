@@ -2,6 +2,7 @@
 
 namespace Codememory\FileSystem;
 
+use Codememory\FileSystem\Exceptions\FileNotFoundException;
 use Codememory\FileSystem\Interfaces\FileInterface;
 use JetBrains\PhpStorm\Pure;
 
@@ -318,6 +319,63 @@ class File implements FileInterface
     {
 
         return filetype($this->getRealPath($path));
+
+    }
+
+    /**
+     * @param string $path
+     * @param array  $parameters
+     *
+     * @return mixed
+     * @throws FileNotFoundException
+     */
+    public function getImport(string $path, array $parameters = []): mixed
+    {
+
+        return $this->importHandler($path, function(string $path) {
+            /** @noinspection PhpIncludeInspection */
+            return require $path;
+        }, $parameters);
+
+    }
+
+    /**
+     * @param string $path
+     * @param array  $parameters
+     *
+     * @return mixed
+     * @throws FileNotFoundException
+     */
+    public function singleImport(string $path, array $parameters = []): mixed
+    {
+
+        return $this->importHandler($path, function(string $path) {
+            /** @noinspection PhpIncludeInspection */
+            return require_once $path;
+        }, $parameters);
+
+    }
+
+    /**
+     * @param string   $path
+     * @param callable $handler
+     * @param array    $parameters
+     *
+     * @return mixed
+     * @throws FileNotFoundException
+     */
+    private function importHandler(string $path, callable $handler, array $parameters = []): mixed
+    {
+
+        if(!$this->exist($path)) {
+            throw new FileNotFoundException($path);
+        }
+
+        $overrideParameters = $parameters;
+
+        extract($overrideParameters, EXTR_SKIP);
+
+        return call_user_func($handler, $path);
 
     }
 
