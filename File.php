@@ -323,16 +323,17 @@ class File implements FileInterface
     }
 
     /**
-     * @param string $path
-     * @param array  $parameters
-     *
-     * @return mixed
+     * @inheritdoc
      * @throws FileNotFoundException
      */
     public function getImport(string $path, array $parameters = []): mixed
     {
 
-        return $this->importHandler($path, function(string $path) {
+        return $this->importHandler($path, function (string $path, array $parameters) {
+            $overrideParameters = $parameters;
+
+            extract($overrideParameters, EXTR_SKIP);
+
             /** @noinspection PhpIncludeInspection */
             return require $path;
         }, $parameters);
@@ -340,16 +341,17 @@ class File implements FileInterface
     }
 
     /**
-     * @param string $path
-     * @param array  $parameters
-     *
-     * @return mixed
+     * @inheritdoc
      * @throws FileNotFoundException
      */
     public function singleImport(string $path, array $parameters = []): mixed
     {
 
-        return $this->importHandler($path, function(string $path) {
+        return $this->importHandler($path, function (string $path, array $parameters) {
+            $overrideParameters = $parameters;
+
+            extract($overrideParameters, EXTR_SKIP);
+
             /** @noinspection PhpIncludeInspection */
             return require_once $path;
         }, $parameters);
@@ -367,15 +369,11 @@ class File implements FileInterface
     private function importHandler(string $path, callable $handler, array $parameters = []): mixed
     {
 
-        if(!$this->exist($path)) {
+        if (!$this->exist($path)) {
             throw new FileNotFoundException($path);
         }
 
-        $overrideParameters = $parameters;
-
-        extract($overrideParameters, EXTR_SKIP);
-
-        return call_user_func($handler, $path);
+        return call_user_func($handler, $path, $parameters);
 
     }
 
@@ -469,7 +467,7 @@ class File implements FileInterface
 
         if ($this->is->file($path)) {
             $delete[] = $path;
-        } elseif ($this->is->directory($path)) {
+        } else if ($this->is->directory($path)) {
             $fs = $this->scanning($path);
 
             foreach ($fs as $f) {

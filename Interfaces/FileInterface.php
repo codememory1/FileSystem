@@ -191,4 +191,20 @@ interface FileInterface
      */
     public function removeLink(string $path, mixed $context = null): bool;
 
+    /**
+     * @param string $path
+     * @param array  $parameters
+     *
+     * @return mixed
+     */
+    public function singleImport(string $path, array $parameters = []): mixed;
+
+    /**
+     * @param string $path
+     * @param array  $parameters
+     *
+     * @return mixed
+     */
+    public function getImport(string $path, array $parameters = []): mixed;
+
 }

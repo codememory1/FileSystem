@@ -27,11 +27,6 @@ class Information
     private int|float $size = 0;
 
     /**
-     * @var AbstractUnit
-     */
-    private AbstractUnit $conversion;
-
-    /**
      * Information constructor.
      *
      * @param FileInterface $file
@@ -39,10 +34,7 @@ class Information
     public function __construct(FileInterface $file)
     {
 
-        $conversion = new Conversion();
-
         $this->file = $file;
-        $this->conversion = $conversion->from(new FromBytes());
 
     }
 
@@ -58,16 +50,17 @@ class Information
      *
      * @return int|float
      */
-    public function getSize(string $path, string $unit = 'getConvertible', bool $recursion = false): int|float
+    public function getSize(string $path, string $unit = Conversion::CURRENT, bool $recursion = false): int|float
     {
 
-        $conversion = $this->conversion->setConvertibleNumber(
-            $this->getSizeHandler($path, $recursion)
-        );
+        $conversion = new Conversion();
+        $conversion
+            ->setConvertibleNumber($this->getSizeHandler($path, $recursion))
+            ->from(new FromBytes());
 
         $this->size = 0;
 
-        return call_user_func_array([$conversion, $unit], []);
+        return $conversion->get($unit);
 
     }
 
@@ -141,6 +134,7 @@ class Information
             if (false === $recursion) {
                 return filesize($this->file->getRealPath($path));
             }
+
             $this->sizeCalculation($path);
 
             return $this->size;

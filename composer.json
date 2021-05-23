@@ -10,12 +10,15 @@
     ],
     "require": {
         "ext-mbstring": "*",
-        "codememory/unit-conversion": "1.0"
+        "codememory/unit-conversion": "2.0"
     },
     "autoload": {
         "psr-4": {
             "Codememory\\FileSystem\\": ""
         }
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "require-dev": {
+        "symfony/var-dumper": "5.x-dev"
+    }
 }
