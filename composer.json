@@ -9,7 +9,6 @@
         }
     ],
     "require": {
-        "ext-mbstring": "*",
         "codememory/unit-conversion": "2.0"
     },
     "autoload": {
@@ -17,8 +16,7 @@
             "Codememory\\FileSystem\\": ""
         }
     },
-    "minimum-stability": "dev",
     "require-dev": {
-        "symfony/var-dumper": "5.x-dev"
+        "symfony/var-dumper": "^5.3"
     }
 }
